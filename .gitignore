@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+dist/
+build/
+
+# Ortam / sırlar
+.env
+.env.*
+!.env.example
+
+# Model ağırlıkları / veri (büyük dosyalar)
+*.pt
+*.pth
+*.onnx
+*.h5
+*.ckpt
+data/
+datasets/
+runs/
+
+# Düzenleyici / işletim sistemi
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+~$*
