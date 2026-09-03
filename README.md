@@ -1,36 +1,38 @@
 # TurnaAI
 
-Turna AI — QualityVision.
+Turna AI — QualityVision. Bilgisayarlı görü tabanlı kalite kontrol çalışmaları.
 
-## Kurulum
+## Projeler
 
-Nerede kalmıştık
-Depo iskeleti (1 Eyl, commit'lendi)
+| Klasör | Açıklama |
+| --- | --- |
+| [`OilBottleVisionDemo/`](OilBottleVisionDemo/) | YOLO tabanlı yağ şişesi kalite kontrol demosu — veri hazırlama, eğitim, değerlendirme, görüntü/video çıkarımı ve Streamlit arayüzü. |
 
-git init -b main, ilk commit 6143956 — sadece kök .gitignore + README.md
-Gitea'yı senin isteğinle boş bıraktık, uzak sunucu tanımlı değil
-OilBottleVisionDemo (yazıldı, ama commit'lenmedi)
+## Hızlı başlangıç
 
-Yağ şişesi kalite kontrol demosu tamamen kodlanmış — 27 dosya, hepsi hâlâ untracked (?? OilBottleVisionDemo/).
+Her proje kendi README'sinde ayrıntılı kurulum adımlarını içerir. `OilBottleVisionDemo` için:
 
-Katman	Durum
-src/	config, dataset, decision_engine, detector, logger, utils, visualization
-scripts/	prepare_dataset, inspect_dataset, train, evaluate, predict_image, predict_video
-app.py	Streamlit arayüzü (4 sekme)
-configs/project.yaml	eşikler, augmentation, video takibi, 7 sınıflık karar eşlemesi
-tests/	55 geçti, 1 atlandı (az önce çalıştırdım, 3 sn)
-Dokümantasyon	14 bölümlük detaylı README
-Ortam hazır ve GPU çalışıyor
+```powershell
+cd OilBottleVisionDemo
 
-.venv → Python 3.11.9, torch 2.11.0+cu128, ultralytics 8.4.137
-CUDA True → RTX 5060 Laptop GPU
-Ağırlıklar indirilmiş: yolo26n.pt, yolo11n.pt (+ weights/yolo26n.pt)
-Eksik olan tek şey: veri seti
-Boş klasörler: data/source/, data/prepared/, models/, outputs/training/. logs/inspections.csv sadece başlık satırından ibaret — yani hiç eğitim ve hiç çıkarım yapılmamış.
+# Sanal ortam (Python 3.11)
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
 
-README'nin 11. bölümü de bunu söylüyor: BOTTLE_QA veri seti workspace'te bulunamadığı için model eğitilmemiş, doğrulama sentetik veriyle yapılıp çıktılar silinmiş.
+# PyTorch — GPU'lu kurulum (CUDA 12.8; RTX 40/50 serisi dahil)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+# GPU yoksa: pip install torch torchvision
 
-Sıradaki adım
-BOTTLE_QA ZIP'ini Roboflow'dan indirip OilBottleVisionDemo/data/source/bottle_qa.zip konumuna koymak, sonra:
+pip install -r requirements.txt
+```
 
-Bir de şu var: demo klasörünün tamamı commit'lenmemiş durumda. İstersen önce onu commit'leyeyim mi?
+Ayrıntılar: [`OilBottleVisionDemo/README.md`](OilBottleVisionDemo/README.md)
+
+## Depoya dahil olmayanlar
+
+`.gitignore` gereği aşağıdakiler depoda tutulmaz, her makinede yerel olarak edinilmelidir:
+
+- Sanal ortamlar (`.venv/`)
+- Model ağırlıkları (`*.pt`, `*.pth`, `*.onnx`, `*.h5`, `*.ckpt`)
+- Veri setleri (`data/`, `datasets/`) ve eğitim çıktıları (`runs/`)
+- Ortam dosyaları (`.env`)
