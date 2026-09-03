@@ -1,0 +1,15 @@
+# OilBottleVisionDemo - Python 3.11
+# PyTorch (CUDA 12.8 / Blackwell) icin bkz. README: kurulum adimlari.
+
+ultralytics>=8.3.0
+opencv-python>=4.10.0
+streamlit>=1.38.0
+pandas>=2.2.0
+numpy>=1.26.0,<3
+Pillow>=10.4.0
+PyYAML>=6.0.1
+matplotlib>=3.9.0
+pytest>=8.3.0
+
+# Veri setini Kaggle'dan otomatik indirmek icin (opsiyonel)
+kagglehub>=0.3.0

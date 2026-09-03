@@ -1,0 +1,106 @@
+# OilBottleVisionDemo - merkezi yapilandirma
+# Tum esikler ve yollar buradan yonetilir.
+
+project:
+  name: OilBottleVisionDemo
+  version: "0.1.0"
+  description: "Yağ şişesi kalite kontrol demosu (BOTTLE_QA veri seti)"
+
+paths:
+  # Proje kokune gore GORECELI yollar. pathlib ile cozulur.
+  data_source: data/source
+  data_prepared: data/prepared
+  models: models
+  outputs: outputs
+  training_output: outputs/training
+  predictions_output: outputs/predictions
+  rejected_output: outputs/rejected
+  reports_output: outputs/reports
+  logs: logs
+  inspection_log: logs/inspections.csv
+
+model:
+  # Oncelikli model; desteklenmiyorsa fallback_weights kullanilir.
+  weights: yolo26n.pt
+  fallback_weights: yolo11n.pt
+  # Egitilmis agirliklar (varsa oncelikli kullanilir)
+  trained_weights: models/best.pt
+  last_weights: models/last.pt
+  imgsz: 640
+  device: auto          # auto | cpu | 0 | 0,1 ...
+
+thresholds:
+  detection_confidence: 0.25
+  manual_review_low: 0.15
+  manual_review_high: 0.30
+  iou_threshold: 0.45
+
+training:
+  epochs: 50
+  smoke_epochs: 3
+  batch: -1              # -1 => Ultralytics otomatik VRAM kullanimi (%60)
+  patience: 10
+  seed: 42
+  workers: 4
+  optimizer: auto
+  cache: false
+  # Dolum seviyesi / etiket kusurlari renk ve konum hassasiyeti tasidigi icin
+  # agresif augmentation KULLANILMIYOR.
+  augment:
+    flipud: 0.0          # dikey flip kapali
+    fliplr: 0.2          # dusuk oranda yatay flip
+    degrees: 5.0         # kucuk rotasyon
+    translate: 0.05
+    scale: 0.15
+    shear: 0.0
+    perspective: 0.0     # perspektif kapali
+    hsv_h: 0.010
+    hsv_s: 0.30          # hafif doygunluk
+    hsv_v: 0.20          # hafif parlaklik/kontrast
+    mosaic: 0.1          # dusuk mosaic
+    close_mosaic: 10     # son 10 epoch mosaic kapali
+    mixup: 0.0
+    copy_paste: 0.0
+    erasing: 0.0
+
+video:
+  # Ayni siseyi ardisik framelerde tekrar saymamak icin
+  frame_stride: 3                 # her N. frame analiz edilir
+  duplicate_suppression_sec: 1.5  # ayni karar bu sure icinde tekrar sayilmaz
+  iou_track_threshold: 0.35       # ardışık framelerde aynı nesne eşiği
+  # Hızlı hatlarda kutu, kendi boyutundan daha çok yer değiştirebilir; bu
+  # durumda IoU sıfırlanır. Merkez mesafesi (frame köşegeninin oranı olarak)
+  # bu değerin altındaysa tespit yine aynı ürüne bağlanır.
+  max_center_distance_ratio: 0.15
+
+# Sinif adi -> Turkce aciklama ve karar esleme tablosu.
+# Sinif ISIMLERI data.yaml'dan okunur; asagidaki tablo yalnizca ESLEME icindir.
+class_mapping:
+  defect_debris:
+    status: HATALI
+    label: "Yabancı Madde"
+    severity: 5
+  defect_no_cap:
+    status: HATALI
+    label: "Kapak Eksik"
+    severity: 5
+  defect_loose_cap:
+    status: HATALI
+    label: "Gevşek/Hasarlı Kapak"
+    severity: 4
+  defect_low_fill:
+    status: HATALI
+    label: "Eksik Dolum"
+    severity: 4
+  defect_label_damage:
+    status: HATALI
+    label: "Etiket Hasarı"
+    severity: 3
+  bottle_other_brand:
+    status: YANLIS_URUN
+    label: "Yanlış Ürün / Farklı Marka"
+    severity: 2
+  bottle_ron88:
+    status: OK
+    label: "Şişe (Ron88)"
+    severity: 0

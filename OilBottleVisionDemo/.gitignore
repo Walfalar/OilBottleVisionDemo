@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Model agirliklari (buyuk dosyalar)
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# Veri seti - Git deposuna DAHIL EDILMEZ
+datasets/
+*.zip
+
+# Klasor yapisi korunur, icerik yok sayilir (.gitkeep izlenir)
+data/source/*
+data/prepared/*
+models/*
+outputs/training/*
+outputs/predictions/*
+outputs/rejected/*
+outputs/reports/*
+logs/*
+!**/.gitkeep
+
+runs/
+
+# Ortam / sirlar
+.env
+.env.*
+!.env.example
+
+# Duzenleyici / isletim sistemi
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+~$*
